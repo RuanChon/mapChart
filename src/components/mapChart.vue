@@ -41,7 +41,7 @@ export default {
       //   { name: "上海", value: 4 }
       // ];
 
-      window.addEventListener("resize", function() {
+      window.addEventListener("resize", ()=>{
         myChart.resize();
       });
 
@@ -486,6 +486,7 @@ export default {
         香港特别行政区: "810100",
         澳门特别行政区: "820000"
       };
+
       var that = this;
 
       // 点击触发
@@ -516,7 +517,7 @@ export default {
       //展示对应的省
       function showProvince(eName,param) {
         console.log(eName, param)
-        $.getJSON(`/map/province/${eName}.json`, (data)=>{
+        $.getJSON(`/map/province/${eName}.json`, data=>{
           that.$echarts.registerMap(param, data);
           alert("省")
           initEcharts(param);

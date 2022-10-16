@@ -8,53 +8,45 @@
 </template>
 
 <script>
-let echarts = require("echarts/lib/echarts");
-import $ from "jquery";
-require("echarts/lib/chart/map");
-require("echarts/map/js/china");
-
+let echarts = require("echarts/lib/echarts")
+import $ from "jquery"
+require("echarts/lib/chart/map")
+require("echarts/map/js/china")
 
 export default {
   name: "mapChart",
   data() {
-    return {};
+    return {}
   },
 
   mounted() {
     // 初始化加载
-    this.mapChart();
+    this.mapChart()
   },
 
   methods: {
     // 返回全国视图
     backMap() {
-      this.$options.methods.mapChart();
+      this.$options.methods.mapChart()
     },
 
     // 配置渲染map
     mapChart() {
-      let myChart = echarts.init(document.getElementById("container"));
-      // let dataList = [
-      //   { name: "南海诸岛", value: 0 },
-      //   { name: "北京", value: 5 },
-      //   { name: "天津", value: 7 },
-      //   { name: "上海", value: 4 }
-      // ];
+      let myChart = echarts.init(document.getElementById("container"))
 
-      window.addEventListener("resize", ()=>{
-        myChart.resize();
-      });
+      window.addEventListener("resize", () => {
+        myChart.resize()
+      })
 
-      initEcharts("china");
+      initEcharts("china")
       function initEcharts(map) {
         let option = {
-          
           geo: {
             map: map,
             roam: false,
             scaleLimit: {
               min: 1.2,
-              max: 3
+              max: 3,
             },
             zoom: 1.2,
             //图形上的文本标签，可用于说明图形的一些数据信息
@@ -62,14 +54,14 @@ export default {
               normal: {
                 show: true,
                 fontSize: "10",
-                color: "rgba(0,0,0,0.7)"
-              }
+                color: "rgba(0,0,0,0.7)",
+              },
             },
             //地图区域的多边形 图形样式，有 normal 和 emphasis 两个状态
             itemStyle: {
               //normal 是图形在默认状态下的样式；
               normal: {
-                borderColor: "rgba(0, 0, 0, 0.2)"
+                borderColor: "rgba(0, 0, 0, 0.2)",
               },
               //emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
               emphasis: {
@@ -78,9 +70,9 @@ export default {
                 shadowOffsetY: 0,
                 shadowBlur: 20,
                 borderWidth: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              }
-            }
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
           },
           series: [
             {
@@ -88,13 +80,12 @@ export default {
               type: "map",
               //这里是'china',及因为js中注册的名字，如果是上海市，则该出需pName 指的是'shanghai'
               mapType: map,
-              geoIndex: 0
-              // data: dataList
-            }
-          ]
-        };
+              geoIndex: 0,
+            },
+          ],
+        }
 
-        myChart.setOption(option);
+        myChart.setOption(option)
       }
 
       //定义全国省份的数组
@@ -136,8 +127,8 @@ export default {
         重庆: "chongqing",
         // 2个特别行政区
         香港: "xianggang",
-        澳门: "aomen"
-      };
+        澳门: "aomen",
+      }
 
       // 市
       var cityMap = {
@@ -484,62 +475,57 @@ export default {
         自治区直辖县级行政区划: "659000",
         台湾省: "710000",
         香港特别行政区: "810100",
-        澳门特别行政区: "820000"
-      };
+        澳门特别行政区: "820000",
+      }
 
-      var that = this;
+      var that = this
 
       // 点击触发
       myChart.on("click", param => {
-
         if (param.name in provinces) {
           // 处理省模块
-          let names = param.name;
+          let names = param.name
           for (let key in provinces) {
             if (names == key) {
-              showProvince(provinces[key], key);
-              break;
+              showProvince(provinces[key], key)
+              break
             }
           }
-
         } else if (param.name in cityMap) {
           // 处理市模块
-          let names = param.name;
+          let names = param.name
           for (let key in cityMap) {
             if (names == key) {
-              showCitys(cityMap[key], key);
-              break;
+              showCitys(cityMap[key], key)
+              break
             }
           }
         }
-      });
+      })
 
       //展示对应的省
-      function showProvince(eName,param) {
+      function showProvince(eName, param) {
         console.log(eName, param)
-        $.getJSON(`/map/province/${eName}.json`, data=>{
-          that.$echarts.registerMap(param, data);
+        $.getJSON(`/map/province/${eName}.json`, data => {
+          that.$echarts.registerMap(param, data)
           alert("省")
-          initEcharts(param);
+          initEcharts(param)
         })
       }
-
 
       //展示对应市
       function showCitys(cName, param) {
         console.log(cName, param)
         // 显示县级地图
-        $.getJSON(`/map/city/${cName}.json`, data=>{
-          that.$echarts.registerMap(param, data);
+        $.getJSON(`/map/city/${cName}.json`, data => {
+          that.$echarts.registerMap(param, data)
           alert("县")
-          initEcharts(param);
+          initEcharts(param)
         })
       }
-
-
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>
@@ -554,5 +540,3 @@ export default {
   z-index: 999;
 }
 </style>
-
-
